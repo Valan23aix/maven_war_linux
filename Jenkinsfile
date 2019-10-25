@@ -1,32 +1,9 @@
-pipeline {
-    agent any
-
-    stages {
-        stage ('Compile Stage') {
-
-            steps {
-                withMaven(maven : 'maven_3_6_2') {
-                    sh 'mvn clean compile'
-                }
-            }
+node{
+        stage('SCM Checkout'){
+	git 'https://github.com/Valan23aix/maven_war_linux.git'
         }
-
-        stage ('Testing Stage') {
-
-            steps {
-                withMaven(maven : 'maven_3_6_2') {
-                    sh 'mvn test'
-                }
-            }
-        }
-
-
-        stage ('Deployment Stage') {
-            steps {
-                withMaven(maven : 'maven_3_6_2') {
-                    sh 'mvn deploy'
-                }
-            }
-        }
-    }
-}
+	stage('Compile-Package'){
+	     def m2_home = tool name: 'maven-3', type: 'maven'
+	     sh "$M2_HOME/bin/mvn package"
+	    }
+  }
